@@ -16,21 +16,10 @@ function App() {
     setPrompt(''); // Clear the input after submission
 
     try {
-      const response = await fetch('https://api.example.com/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ prompt }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await response.json();
-      setApiResponse(data.message);
+      // Mocking the API response
+      const mockResponse = { message: 'This is a mocked response' };
+      setApiResponse(mockResponse.message);
     } catch (error) {
-      setApiResponse('Error fetching response');
       console.error('Error:', error);
     }
   };
