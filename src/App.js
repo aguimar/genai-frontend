@@ -17,7 +17,7 @@ function App() {
     setPrompt(''); // Clear the input after submission
 
     try {
-      const response = await fetch('http://localhost:8080/api/prompts', {
+      const response = await fetch('http://localhost:8000/api/prompts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ function App() {
       <header className="App-header">
         <h1>Image Prompt Generator</h1>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="prompt">Enter your prompt:</label>
+          <label htmlFor="prompt">Enter your prompt fdf df:</label>
           <input
             type="text"
             id="prompt"
