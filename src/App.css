@@ -59,3 +59,90 @@ button {
   font-size: 1.2rem;
   color: #243E73; /* Moda-2 */
 }
+
+.api-response {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 600px;
+}
+
+.api-response h2 {
+  font-size: 1.5rem;
+  color: #243E73; /* Moda-2 */
+  margin-bottom: 16px;
+}
+
+.api-response ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.api-response li {
+  margin-bottom: 12px;
+  padding: 12px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.api-response li:hover {
+  background-color: #f1f1f1;
+  transform: translateY(-2px);
+}
+
+.api-response li label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.api-response li input[type="checkbox"] {
+  margin-right: 12px;
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
+.selected-prompts {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 600px;
+}
+
+.selected-prompts h3 {
+  font-size: 1.3rem;
+  color: #243E73; /* Moda-2 */
+  margin-bottom: 16px;
+}
+
+.selected-prompts ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.selected-prompts li {
+  margin-bottom: 12px;
+  padding: 12px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.selected-prompts li:hover {
+  background-color: #f1f1f1;
+}
