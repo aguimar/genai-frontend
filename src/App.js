@@ -6,6 +6,7 @@ function App() {
   const [submittedPrompt, setSubmittedPrompt] = useState('');
   const [apiResponse, setApiResponse] = useState(null);
   const [selectedPrompts, setSelectedPrompts] = useState([]);
+  const [apiResponse, setApiResponse] = useState([]);
 
   const handleInputChange = (event) => {
     setPrompt(event.target.value);
@@ -32,6 +33,15 @@ function App() {
       const data = await response.json();
       setApiResponse(data); // Set the API response in state
       setSelectedPrompts([]); // Reset selected prompts when new data is fetched
+      // Mocking the API response with 5 decorated image prompts
+      const mockResponse = [
+        { id: 1, prompt: 'Decorated Image Prompt 10' },
+        { id: 2, prompt: 'Decorated Image Prompt 20' },
+        { id: 3, prompt: 'Decorated Image Prompt 3' },
+        { id: 4, prompt: 'Decorated Image Prompt 4' },
+        { id: 5, prompt: 'Decorated Image Prompt 5' },
+      ];
+      setApiResponse(mockResponse);
     } catch (error) {
       console.error('Error posting data:', error.message || error);
       setApiResponse({ error: error.message }); // Set error message in state
@@ -43,21 +53,19 @@ function App() {
       setSelectedPrompts([...selectedPrompts, prompt]); // Add prompt to selected prompts
     } else {
       setSelectedPrompts(selectedPrompts.filter((p) => p !== prompt)); // Remove prompt from selected prompts
+      console.error('Error:', error);
     }
   };
 
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Image Prompt Generator</h1>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="prompt">Enter your prompt:</label>
           <input
             type="text"
-            id="prompt"
             value={prompt}
             onChange={handleInputChange}
-            placeholder="Boy playing soccer"
+            placeholder="Enter your prompt"
           />
           <button type="submit">Submit</button>
         </form>
