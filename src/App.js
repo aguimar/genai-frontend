@@ -13,9 +13,22 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedModel, setSelectedModel] = useState('Model A'); // Default model
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de autenticação
+  const [username, setUsername] = useState(''); // Estado do nome de usuário
+  const [password, setPassword] = useState(''); // Estado da senha
 
   const handleInputChange = (event) => {
     setPrompt(event.target.value);
+  };
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+    // Simulação de autenticação
+    if (username === 'admin' && password === 'password') {
+      setIsAuthenticated(true);
+    } else {
+      alert('Credenciais inválidas');
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -110,122 +123,148 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>Image Prompt Generator</h1>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="prompt">Enter your prompt:</label>
-          <input
-            type="text"
-            id="prompt"
-            value={prompt}
-            onChange={handleInputChange}
-            placeholder="Boy playing soccer"
-            aria-label="Enter your prompt"
-          />
-          <label htmlFor="model">Choose Model:</label>
-          <select
-            id="model"
-            value={selectedModel}
-            onChange={(e) => setSelectedModel(e.target.value)}
-          >
-            <option value="Model A">Model A</option>
-            <option value="Model B">Model B</option>
-            <option value="Model C">Model C</option>
-          </select>
-          <button type="submit" disabled={isLoading}>
-            {isLoading ? 'Submitting...' : 'Submit'}
-          </button>
-        </form>
-        {submittedPrompt && (
-          <div className="submitted-prompt">
-            <h2>Submitted Prompt:</h2>
-            <p>{submittedPrompt}</p>
-          </div>
-        )}
-        {apiResponse && (
-          <div className="api-response">
-            <h2>API Response:</h2>
-            {apiResponse.error ? (
-              <p className="error">Error: {apiResponse.error}</p>
-            ) : (
-              <>
-                {apiResponse.prompts && (
+        {!isAuthenticated ? (
+          <form onSubmit={handleLogin}>
+            <label htmlFor="username">Username:</label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter username"
+              aria-label="Enter username"
+            />
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter password"
+              aria-label="Enter password"
+            />
+            <button type="submit">Login</button>
+          </form>
+        ) : (
+          <>
+            <form onSubmit={handleSubmit}>
+              <label htmlFor="prompt">Enter your prompt:</label>
+              <input
+                type="text"
+                id="prompt"
+                value={prompt}
+                onChange={handleInputChange}
+                placeholder="Boy playing soccer"
+                aria-label="Enter your prompt"
+              />
+              <label htmlFor="model">Choose Model:</label>
+              <select
+                id="model"
+                value={selectedModel}
+                onChange={(e) => setSelectedModel(e.target.value)}
+              >
+                <option value="Model A">Model A</option>
+                <option value="Model B">Model B</option>
+                <option value="Model C">Model C</option>
+              </select>
+              <button type="submit" disabled={isLoading}>
+                {isLoading ? 'Submitting...' : 'Submit'}
+              </button>
+            </form>
+            {submittedPrompt && (
+              <div className="submitted-prompt">
+                <h2>Submitted Prompt:</h2>
+                <p>{submittedPrompt}</p>
+              </div>
+            )}
+            {apiResponse && (
+              <div className="api-response">
+                <h2>API Response:</h2>
+                {apiResponse.error ? (
+                  <p className="error">Error: {apiResponse.error}</p>
+                ) : (
                   <>
-                    <h3>Select one or more prompts:</h3>
-                    <ul>
-                      {apiResponse.prompts.map((prompt, index) => (
-                        <li key={index}>
-                          <label>
-                            <input
-                              type="checkbox"
-                              value={prompt}
-                              onChange={(e) => handlePromptSelection(e, prompt)}
-                            />
-                            {prompt}
-                          </label>
-                        </li>
-                      ))}
-                    </ul>
+                    {apiResponse.prompts && (
+                      <>
+                        <h3>Select one or more prompts:</h3>
+                        <ul>
+                          {apiResponse.prompts.map((prompt, index) => (
+                            <li key={index}>
+                              <label>
+                                <input
+                                  type="checkbox"
+                                  value={prompt}
+                                  onChange={(e) => handlePromptSelection(e, prompt)}
+                                />
+                                {prompt}
+                              </label>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    )}
+                    {selectedPrompts.length > 0 && (
+                      <div className="selected-prompts">
+                        <h3>Selected Prompts:</h3>
+                        <ul>
+                          {selectedPrompts.map((prompt, index) => (
+                            <li key={index}>{prompt}</li>
+                          ))}
+                        </ul>
+                        <button onClick={handleSelectedSubmit} disabled={isLoading}>
+                          {isLoading ? 'Submitting...' : 'Submit Selected Prompts'}
+                        </button>
+                      </div>
+                    )}
                   </>
                 )}
-                {selectedPrompts.length > 0 && (
-                  <div className="selected-prompts">
-                    <h3>Selected Prompts:</h3>
-                    <ul>
-                      {selectedPrompts.map((prompt, index) => (
-                        <li key={index}>{prompt}</li>
-                      ))}
-                    </ul>
-                    <button onClick={handleSelectedSubmit} disabled={isLoading}>
-                      {isLoading ? 'Submitting...' : 'Submit Selected Prompts'}
-                    </button>
-                  </div>
-                )}
-              </>
+              </div>
             )}
-          </div>
-        )}
-        {urls.length > 0 && (
-          <div className="urls-list">
-            <h2>Generated Thumbnails:</h2>
-            <div className="thumbnails-container">
-              {urls.map((url, index) => (
-                <div
-                  key={index}
-                  className="thumbnail"
-                  onClick={() => {
-                    setSelectedImage(url);
-                    setIsModalOpen(true);
-                  }}
-                >
-                  <img
-                    src={url}
-                    alt={`Thumbnail ${index + 1}`}
-                    className="thumbnail-image"
-                  />
-                  <a
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="thumbnail-link"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    View Full Image
-                  </a>
+            {urls.length > 0 && (
+              <div className="urls-list">
+                <h2>Generated Thumbnails:</h2>
+                <div className="thumbnails-container">
+                  {urls.map((url, index) => (
+                    <div
+                      key={index}
+                      className="thumbnail"
+                      onClick={() => {
+                        setSelectedImage(url);
+                        setIsModalOpen(true);
+                      }}
+                    >
+                      <img
+                        src={url}
+                        alt={`Thumbnail ${index + 1}`}
+                        className="thumbnail-image"
+                      />
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="thumbnail-link"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        View Full Image
+                      </a>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
-        {isModalOpen && (
-          <Modal
-            imageUrl={selectedImage}
-            onClose={() => setIsModalOpen(false)}
-          />
-        )}
-        {apiResponse && !apiResponse.error && (
-          <div className="api-response-list">
-            <h2>Full API Response:</h2>
-            <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
-          </div>
+              </div>
+            )}
+            {isModalOpen && (
+              <Modal
+                imageUrl={selectedImage}
+                onClose={() => setIsModalOpen(false)}
+              />
+            )}
+            {apiResponse && !apiResponse.error && (
+              <div className="api-response-list">
+                <h2>Full API Response:</h2>
+                <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
+              </div>
+            )}
+          </>
         )}
       </header>
     </div>
